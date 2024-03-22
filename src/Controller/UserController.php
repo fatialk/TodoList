@@ -18,26 +18,26 @@ class UserController extends AbstractController
         return $this->render('user/list.html.twig', ['users' => $em->getRepository(User::class)->findAll()]);
     }
 
-    #[Route('/users/create', name: 'user_create')]
-    public function createAction(Request $request, EntityManagerInterface $em)
-    {
-        $user = new User();
-        $form = $this->createForm(UserType::class, $user);
+    // #[Route('/users/create', name: 'user_create')]
+    // public function createAction(Request $request, EntityManagerInterface $em)
+    // {
+    //     $user = new User();
+    //     $form = $this->createForm(UserType::class, $user);
 
-        $form->handleRequest($request);
+    //     $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+    //     if ($form->isSubmitted() && $form->isValid()) {
 
-            $em->persist($user);
-            $em->flush();
+    //         $em->persist($user);
+    //         $em->flush();
 
-            $this->addFlash('success', "L'utilisateur a bien été ajouté.");
+    //         $this->addFlash('success', "L'utilisateur a bien été ajouté.");
 
-            return $this->redirectToRoute('user_list');
-        }
+    //         return $this->redirectToRoute('user_list');
+    //     }
 
-        return $this->render('user/create.html.twig', ['form' => $form->createView()]);
-    }
+    //     return $this->render('user/create.html.twig', ['form' => $form->createView()]);
+    // }
 
     #[Route('/users/{id}/edit', name: 'user_edit')]
     public function editAction(User $user, Request $request, EntityManagerInterface $em)
