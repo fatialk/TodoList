@@ -19,19 +19,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private $id;
+    private int $id;
 
     #[Assert\NotBlank(message: "Vous devez saisir un nom d'utilisateur.")]
     #[ORM\Column(type: Types::STRING, length: 25, unique: true)]
-    private $username;
+    private string $username;
 
     #[ORM\Column(type: Types::STRING, length: 64)]
-    private $password;
+    private string $password;
 
     #[Assert\NotBlank(message: "Vous devez saisir une adresse email.")]
     #[Assert\Email(message: "Le format de l'adresse n'est pas correcte.")]
     #[ORM\Column(type: Types::STRING, length: 60, unique: true)]
-    private $email;
+    private string $email;
 
     #[ORM\Column(type: 'json')]
     private array $roles = [];
