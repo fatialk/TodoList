@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use DateTime;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping as ORM;
@@ -14,21 +15,25 @@ class Task
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private $id;
+    private int $id;
 
     #[ORM\Column(name: 'created_at', type: Types::DATETIME_MUTABLE)]
-    private $createdAt;
+    private ?DateTime $createdAt;
 
     #[Assert\NotBlank(message: "Vous devez saisir un titre.")]
     #[ORM\Column(type: Types::STRING, length: 255)]
-    private $title;
+    private string $title;
 
     #[Assert\NotBlank(message: "Vous devez saisir un contenu.")]
     #[ORM\Column(type: Types::TEXT)]
-    private $content;
+    private string $content;
 
     #[ORM\Column(type: Types::BOOLEAN)]
-    private $isDone;
+    private bool $isDone;
+
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'tasks')]
+    #[ORM\JoinColumn(name: "user_id", referencedColumnName: "id", nullable: false)]
+    private ?user $user = null;
 
     public function __construct()
     {
@@ -79,5 +84,17 @@ class Task
     public function toggle($flag)
     {
         $this->isDone = $flag;
+    }
+
+    public function getUser(): ?user
+    {
+        return $this->user;
+    }
+
+    public function setUser(?user $user): static
+    {
+        $this->user = $user;
+
+        return $this;
     }
 }
