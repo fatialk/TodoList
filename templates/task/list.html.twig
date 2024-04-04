@@ -3,7 +3,9 @@
 {% block header_img %}<img class="slide-image" src="{{ asset('img/todolist_content.jpg') }}" alt="todo list">{% endblock %}
 
 {% block body %}
+    {% if app.user is not empty %}
     <a href="{{ path('task_create') }}" class="btn btn-info pull-right">Créer une tâche</a>
+    {% endif %}
     <div class="row">
         {% for task in tasks %}
         <div class="col-sm-4 col-lg-4 col-md-4">
@@ -17,6 +19,7 @@
                     </h4>
                     <p>{{ task.content }}</p>
                 </div>
+                {% if app.user is not empty %}
                 <div>
                     <form action="{{ path('task_toggle', {'id' : task.id }) }}">
                         <button class="btn btn-success btn-sm pull-right">
@@ -27,6 +30,7 @@
                         <button class="btn btn-danger btn-sm pull-right">Supprimer</button>
                     </form>
                 </div>
+                {% endif %}
             </div>
         </div>
         {% else %}

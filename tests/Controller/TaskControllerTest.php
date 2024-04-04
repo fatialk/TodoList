@@ -114,12 +114,18 @@ class TaskControllerType extends TestCase
 
 
         $response = $this->taskController->createAction($requestMock, $entityManagerMock);
+        static::assertInstanceOf(Response::class, $response);
+
+        $this->user = new User();
+        $response = $this->taskController->createAction($requestMock, $entityManagerMock);
         static::assertInstanceOf(RedirectResponse::class, $response);
 
         $this->formIsValid = false;
         $response = $this->taskController->createAction($requestMock, $entityManagerMock);
         static::assertInstanceOf(Response::class, $response);
         static::assertEquals('rendered content', $response->getContent());
+
+
     }
 
     public function testEditAction()

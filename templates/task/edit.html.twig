@@ -4,8 +4,9 @@
     <div class="row">
         {{ form_start(form, {'action' : path('task_edit', { 'id' : task.id })}) }}
             {{ form_widget(form) }}
-
+            {% if app.user is not empty %}
             <button type="submit" class="btn btn-success pull-right">Modifier</button>
+            {% endif %}
         {{ form_end(form) }}
     </div>
 {% endblock %}
