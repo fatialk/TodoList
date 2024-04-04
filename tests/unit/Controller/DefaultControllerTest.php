@@ -1,5 +1,5 @@
 <?php
-namespace App\Tests;
+namespace App\Tests\Controller;
 
 use Twig\Environment;
 use PHPUnit\Framework\TestCase;

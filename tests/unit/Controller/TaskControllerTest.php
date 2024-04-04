@@ -1,5 +1,5 @@
 <?php
-namespace App\Tests;
+namespace App\Tests\Controller;
 
 use App\Entity\Task;
 use App\Entity\User;
@@ -44,7 +44,7 @@ class TaskControllerType extends TestCase
         $formInterfaceMock->method('isValid')->withAnyParameters()->willReturnCallback(fn() => $this->formIsValid);
         $formInterfaceMock->method('isSubmitted')->withAnyParameters()->willReturn(true);
         $formInterfaceMock->method('get')->withAnyParameters()->willReturn($formInterfaceMock);
-        $formInterfaceMock->method('getData')->withAnyParameters()->willReturn('toto');
+        $formInterfaceMock->method('getData')->withAnyParameters()->willReturn('bobo');
 
         $formFactoryInterfaceMock = $this->createMock(FormFactoryInterface::class);
         $formFactoryInterfaceMock->method('create')->withAnyParameters()->willReturn($formInterfaceMock);
@@ -162,7 +162,7 @@ class TaskControllerType extends TestCase
     {
 
         $this->user = new User();
-        $this->user->setUsername('toto');
+        $this->user->setUsername('bobo');
         $task = new Task();
         $task->setUser($this->user);
         $entityManagerMock = $this->createMock(EntityManagerInterface::class);

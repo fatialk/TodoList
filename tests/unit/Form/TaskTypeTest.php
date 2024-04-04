@@ -1,20 +1,20 @@
 <?php
-namespace App\Tests;
+namespace App\Tests\Unit\Form;
 
 use PHPUnit\Framework\TestCase;
-use App\Form\UserType;
+use App\Form\TaskType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 
-class UserTypeTest extends TestCase
+class TaskTypeTest extends TestCase
 {
-    private UserType $userType;
+    private TaskType $taskType;
     private bool $added = false;
 
     protected function setUp(): void
     {
-        $this->userType = new UserType();
+        $this->taskType = new TaskType();
     }
 
     public function testBuildForm()
@@ -25,7 +25,8 @@ class UserTypeTest extends TestCase
             return $formBuilderMock;
         });
 
-        $this->userType->buildForm($formBuilderMock, []);
+        $this->taskType->buildForm($formBuilderMock, []);
         static::assertTrue($this->added);
     }
+
 }

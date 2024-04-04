@@ -1,36 +1,28 @@
 <?php
-namespace App\Tests;
+namespace App\Tests\Controller;
 
-use App\Entity\Task;
 use App\Entity\User;
 use Twig\Environment;
 use PHPUnit\Framework\TestCase;
-use App\Controller\TaskController;
-use Doctrine\ORM\EntityRepository;
 use App\Controller\DefaultController;
 use App\Controller\SecurityController;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Controller\RegistrationController;
-use App\Controller\UserController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Test\FormInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
-class UserControllerTest extends TestCase
+class SecurityControllerTest extends TestCase
 {
-    private UserController $userController;
+    private SecurityController $securityControllerMock;
     private bool $formIsValid = true;
     private ?User $user = null;
 
@@ -45,7 +37,7 @@ class UserControllerTest extends TestCase
         $formInterfaceMock->method('isValid')->withAnyParameters()->willReturnCallback(fn() => $this->formIsValid);
         $formInterfaceMock->method('isSubmitted')->withAnyParameters()->willReturn(true);
         $formInterfaceMock->method('get')->withAnyParameters()->willReturn($formInterfaceMock);
-        $formInterfaceMock->method('getData')->withAnyParameters()->willReturn('toto');
+        $formInterfaceMock->method('getData')->withAnyParameters()->willReturn('bobo');
 
         $formFactoryInterfaceMock = $this->createMock(FormFactoryInterface::class);
         $formFactoryInterfaceMock->method('create')->withAnyParameters()->willReturn($formInterfaceMock);
@@ -59,29 +51,18 @@ class UserControllerTest extends TestCase
         $securityTokenStorageMock = $this->createMock(TokenStorageInterface::class);
         $securityTokenStorageMock->method('getToken')->withAnyParameters()->willReturn($tokenInterfaceMock);
 
-        $flashBagMock = $this->createMock(FlashBag::class);
-        $flashBagMock->method('add')->withAnyParameters();
-
-        $sessionInterfaceMock = $this->createMock(Session::class);
-        $sessionInterfaceMock->method('getFlashBag')->withAnyParameters()->willReturn($flashBagMock);
-
-        $requestStackMock = $this->createMock(RequestStack::class);
-        $requestStackMock->method('getSession')->withAnyParameters()->willReturn($sessionInterfaceMock);
-
         $containerMock = $this->createMock(ContainerInterface::class);
         $containerMock->method('get')->willReturnCallback(function ($param) use (
             $templatingMock,
          $formFactoryInterfaceMock,
          $routerMock,
-         $requestStackMock,
          $securityTokenStorageMock
          ) {
             return match ($param) {
                 'twig' => $templatingMock,
                 'form.factory' => $formFactoryInterfaceMock,
                 'router' => $routerMock,
-                'security.token_storage' => $securityTokenStorageMock,
-                'request_stack' => $requestStackMock
+                'security.token_storage' => $securityTokenStorageMock
             };
         });
         $containerMock->method('has')->willReturnCallback(function ($param) {
@@ -90,37 +71,32 @@ class UserControllerTest extends TestCase
             };
         });
 
-        $this->userController = new UserController();
-        $this->userController->setContainer($containerMock);
+        $this->securityControllerMock = new SecurityController();
+        $this->securityControllerMock->setContainer($containerMock);
     }
 
-    public function testListAction()
+    public function testLoginAction()
     {
-        $entityRepositoryMock = $this->createMock(EntityRepository::class);
-        $entityRepositoryMock->method('findAll')->withAnyParameters()->willReturn([]);
-        $entityManagerMock = $this->createMock(EntityManagerInterface::class);
-        $entityManagerMock->method('getRepository')->withAnyParameters()->willReturn($entityRepositoryMock);
 
-        $response = $this->userController->listAction($entityManagerMock);
+        $authenticationUtilsMock = $this->createMock(AuthenticationUtils::class);
+        $authenticationUtilsMock->method('getLastAuthenticationError')->withAnyParameters()->willReturn(null);
+        $authenticationUtilsMock->method('getLastUsername')->withAnyParameters()->willReturn('bobo');
+
+
+        $response = $this->securityControllerMock->loginAction($authenticationUtilsMock);
         static::assertInstanceOf(Response::class, $response);
-    }
-
-    public function testEditAction()
-    {
-        $requestMock  = $this->createMock(Request::class);
-
-        $entityManagerMock = $this->createMock(EntityManagerInterface::class);
-        $entityManagerMock->method('persist')->withAnyParameters();
-        $entityManagerMock->method('flush')->withAnyParameters();
 
 
-        $response = $this->userController->editAction(new User(), $requestMock, $entityManagerMock);
+        $this->user = new User();
+        $response = $this->securityControllerMock->loginAction($authenticationUtilsMock);
         static::assertInstanceOf(RedirectResponse::class, $response);
 
-        $this->formIsValid = false;
-        $response = $this->userController->editAction(new User(), $requestMock, $entityManagerMock);
-        static::assertInstanceOf(Response::class, $response);
-        static::assertEquals('rendered content', $response->getContent());
+    }
+
+    public function testLogoutAction()
+    {
+        static::expectException(\LogicException::class);
+        $this->securityControllerMock->logout();
     }
 
 }

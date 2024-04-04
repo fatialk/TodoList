@@ -46,9 +46,20 @@ Il vous est également demandé d’analyser le projet grâce à des outils vous
    - php bin/console doctrine:schema:update --force
    - php bin/console doctrine:fixtures:load
 
+6. Créer la base de données et générer les tables de test:
+
+   - php bin/console doctrine:database:create --env=test
+   - php bin/console doctrine:schema:update --force --env=test
+
 # Tester l'application
 
-   - pour se connecter en tant qu'admin: username = admin1 / password = password
+1. Lancer les tests unitaires:
+
+   - .\vendor\bin\phpunit --coverage-html public/test-coverage --testsuite unit
+
+2. Lancer les tests fonctionnels:
+
+   - .\vendor\bin\phpunit --coverage-html public/test-coverage --testsuite functional
 
 
 
