@@ -33,7 +33,7 @@ Il vous est également demandé d’analyser le projet grâce à des outils vous
 
    - composer install
 
-3. Modifier la connexion à la base de données dans le fichier .env :
+3. Renommer le fichier .env.local en .env et Modifier la connexion à la base de données:
 
    - DATABASE_URL=mysql://db_user:db_password@127.0.0.1:3306/db_name
 
