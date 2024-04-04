@@ -1,7 +1,7 @@
 # TODO_LIST
 Project 8 du parcours "développeur d'applications PHP/Symfony" chez Openclassrooms.
 
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/353e58fd13864a4491b2589c1be5550e)](https://app.codacy.com/gh/fatialk/bilemo/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/259d6c04c317430c9c35c8de9b5bc94a)](https://app.codacy.com/gh/fatialk/todolist/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
 
 # Description
 Vous venez d’intégrer une startup dont le cœur de métier est une application permettant de gérer ses tâches quotidiennes. L’entreprise vient tout juste d’être montée, et l’application a dû être développée à toute vitesse pour permettre de montrer à de potentiels investisseurs que le concept est viable (on parle de Minimum Viable Product ou MVP).
