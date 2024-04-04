@@ -22,6 +22,11 @@ class TaskController extends AbstractController
     #[Route('/tasks/create', name: 'task_create', methods: ['GET', 'POST'])]
     public function createAction(Request $request, EntityManagerInterface $em): Response
     {
+        if ($this->getUser() == null){
+
+            return $this->redirectToRoute('login');
+        }
+
         $task = new Task();
         $form = $this->createForm(TaskType::class, $task);
 
@@ -80,10 +85,15 @@ class TaskController extends AbstractController
     #[Route('/tasks/{id}/delete', name: 'task_delete')]
     public function deleteTaskAction(Task $task, EntityManagerInterface $em)
     {
+        if ($this->getUser() == null){
+
+            return $this->redirectToRoute('login');
+        }
+
         $author = $task->getUser();
         $connectedUser = $this->getUser();
-        $roles = $this->getUser()->getRoles();
         $username = $task->getUser()->getUsername();
+        $roles = $this->getUser()->getRoles();
 
         if (($author == $connectedUser) || (in_array('ROLE_ADMIN', $roles) && $username == 'anonyme')){
 

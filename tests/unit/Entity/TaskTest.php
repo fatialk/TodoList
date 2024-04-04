@@ -1,5 +1,5 @@
 <?php
-namespace App\Tests\Entity;
+namespace App\Tests\Unit\Entity;
 use DateTime;
 use App\Entity\Task;
 use App\Entity\User;

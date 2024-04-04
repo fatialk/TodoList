@@ -1,5 +1,5 @@
 <?php
-namespace App\Tests;
+namespace App\Tests\Controller;
 
 use App\Entity\User;
 use Twig\Environment;
@@ -37,7 +37,7 @@ class SecurityControllerTest extends TestCase
         $formInterfaceMock->method('isValid')->withAnyParameters()->willReturnCallback(fn() => $this->formIsValid);
         $formInterfaceMock->method('isSubmitted')->withAnyParameters()->willReturn(true);
         $formInterfaceMock->method('get')->withAnyParameters()->willReturn($formInterfaceMock);
-        $formInterfaceMock->method('getData')->withAnyParameters()->willReturn('toto');
+        $formInterfaceMock->method('getData')->withAnyParameters()->willReturn('bobo');
 
         $formFactoryInterfaceMock = $this->createMock(FormFactoryInterface::class);
         $formFactoryInterfaceMock->method('create')->withAnyParameters()->willReturn($formInterfaceMock);
@@ -80,7 +80,7 @@ class SecurityControllerTest extends TestCase
 
         $authenticationUtilsMock = $this->createMock(AuthenticationUtils::class);
         $authenticationUtilsMock->method('getLastAuthenticationError')->withAnyParameters()->willReturn(null);
-        $authenticationUtilsMock->method('getLastUsername')->withAnyParameters()->willReturn('toto');
+        $authenticationUtilsMock->method('getLastUsername')->withAnyParameters()->willReturn('bobo');
 
 
         $response = $this->securityControllerMock->loginAction($authenticationUtilsMock);

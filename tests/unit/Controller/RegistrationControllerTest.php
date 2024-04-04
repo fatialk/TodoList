@@ -1,5 +1,5 @@
 <?php
-namespace App\Tests;
+namespace App\Tests\Controller;
 
 use Twig\Environment;
 use PHPUnit\Framework\TestCase;
@@ -31,7 +31,7 @@ class RegistrationControllerTest extends TestCase
         $formInterfaceMock->method('isValid')->withAnyParameters()->willReturnCallback(fn() => $this->formIsValid);
         $formInterfaceMock->method('isSubmitted')->withAnyParameters()->willReturn(true);
         $formInterfaceMock->method('get')->withAnyParameters()->willReturn($formInterfaceMock);
-        $formInterfaceMock->method('getData')->withAnyParameters()->willReturn('toto');
+        $formInterfaceMock->method('getData')->withAnyParameters()->willReturn('bobo');
 
         $formFactoryInterfaceMock = $this->createMock(FormFactoryInterface::class);
         $formFactoryInterfaceMock->method('create')->withAnyParameters()->willReturn($formInterfaceMock);

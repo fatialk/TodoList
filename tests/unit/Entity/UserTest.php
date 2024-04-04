@@ -1,5 +1,5 @@
 <?php
-namespace App\Tests\Entity;
+namespace App\Tests\Unit\Entity;
 use App\Entity\Task;
 use App\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;

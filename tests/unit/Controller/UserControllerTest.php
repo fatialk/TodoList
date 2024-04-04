@@ -1,5 +1,5 @@
 <?php
-namespace App\Tests;
+namespace App\Tests\Unit\Controller;
 
 use App\Entity\Task;
 use App\Entity\User;
@@ -11,6 +11,7 @@ use App\Controller\DefaultController;
 use App\Controller\SecurityController;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Controller\RegistrationController;
+use App\Controller\UserController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Test\FormInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,9 +28,9 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
-class TaskControllerType extends TestCase
+class UserControllerTest extends TestCase
 {
-    private TaskController $taskController;
+    private UserController $userController;
     private bool $formIsValid = true;
     private ?User $user = null;
 
@@ -44,7 +45,7 @@ class TaskControllerType extends TestCase
         $formInterfaceMock->method('isValid')->withAnyParameters()->willReturnCallback(fn() => $this->formIsValid);
         $formInterfaceMock->method('isSubmitted')->withAnyParameters()->willReturn(true);
         $formInterfaceMock->method('get')->withAnyParameters()->willReturn($formInterfaceMock);
-        $formInterfaceMock->method('getData')->withAnyParameters()->willReturn('toto');
+        $formInterfaceMock->method('getData')->withAnyParameters()->willReturn('bobo');
 
         $formFactoryInterfaceMock = $this->createMock(FormFactoryInterface::class);
         $formFactoryInterfaceMock->method('create')->withAnyParameters()->willReturn($formInterfaceMock);
@@ -89,8 +90,8 @@ class TaskControllerType extends TestCase
             };
         });
 
-        $this->taskController = new TaskController();
-        $this->taskController->setContainer($containerMock);
+        $this->userController = new UserController();
+        $this->userController->setContainer($containerMock);
     }
 
     public function testListAction()
@@ -100,26 +101,8 @@ class TaskControllerType extends TestCase
         $entityManagerMock = $this->createMock(EntityManagerInterface::class);
         $entityManagerMock->method('getRepository')->withAnyParameters()->willReturn($entityRepositoryMock);
 
-        $response = $this->taskController->listAction($entityManagerMock);
+        $response = $this->userController->listAction($entityManagerMock);
         static::assertInstanceOf(Response::class, $response);
-    }
-
-    public function testCreateAction()
-    {
-        $requestMock  = $this->createMock(Request::class);
-
-        $entityManagerMock = $this->createMock(EntityManagerInterface::class);
-        $entityManagerMock->method('persist')->withAnyParameters();
-        $entityManagerMock->method('flush')->withAnyParameters();
-
-
-        $response = $this->taskController->createAction($requestMock, $entityManagerMock);
-        static::assertInstanceOf(RedirectResponse::class, $response);
-
-        $this->formIsValid = false;
-        $response = $this->taskController->createAction($requestMock, $entityManagerMock);
-        static::assertInstanceOf(Response::class, $response);
-        static::assertEquals('rendered content', $response->getContent());
     }
 
     public function testEditAction()
@@ -131,49 +114,13 @@ class TaskControllerType extends TestCase
         $entityManagerMock->method('flush')->withAnyParameters();
 
 
-        $response = $this->taskController->editAction(new Task(), $requestMock, $entityManagerMock);
+        $response = $this->userController->editAction(new User(), $requestMock, $entityManagerMock);
         static::assertInstanceOf(RedirectResponse::class, $response);
 
         $this->formIsValid = false;
-        $response = $this->taskController->editAction(new Task(), $requestMock, $entityManagerMock);
+        $response = $this->userController->editAction(new User(), $requestMock, $entityManagerMock);
         static::assertInstanceOf(Response::class, $response);
         static::assertEquals('rendered content', $response->getContent());
     }
-
-    public function testToggleTaskAction()
-    {
-
-        $entityManagerMock = $this->createMock(EntityManagerInterface::class);
-        $entityManagerMock->method('persist')->withAnyParameters();
-        $entityManagerMock->method('flush')->withAnyParameters();
-        $task = new Task();
-        $task->setTitle('title');
-        $response = $this->taskController->toggleTaskAction($task, $entityManagerMock);
-        static::assertInstanceOf(RedirectResponse::class, $response);
-    }
-
-    public function testDeleteTaskAction()
-    {
-
-        $this->user = new User();
-        $this->user->setUsername('toto');
-        $task = new Task();
-        $task->setUser($this->user);
-        $entityManagerMock = $this->createMock(EntityManagerInterface::class);
-        $entityManagerMock->method('remove')->withAnyParameters();
-        $entityManagerMock->method('flush')->withAnyParameters();
-
-        $response = $this->taskController->deleteTaskAction($task, $entityManagerMock);
-        static::assertInstanceOf(RedirectResponse::class, $response);
-
-        $task = new Task();
-        $taskUser = new User();
-        $taskUser->setUsername('bobo');
-        $task->setUser($taskUser);
-        $response = $this->taskController->deleteTaskAction($task, $entityManagerMock);
-        static::assertInstanceOf(RedirectResponse::class, $response);
-
-    }
-
 
 }
