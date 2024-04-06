@@ -89,7 +89,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->email = $email;
     }
 
-        // @see UserInterface
+    // @see UserInterface
     //
     public function getUserIdentifier(): string
     {

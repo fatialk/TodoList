@@ -22,7 +22,7 @@ class TaskController extends AbstractController
     #[Route('/tasks/create', name: 'task_create', methods: ['GET', 'POST'])]
     public function createAction(Request $request, EntityManagerInterface $em): Response
     {
-        if ($this->getUser() == null){
+        if ($this->getUser() == null) {
 
             return $this->redirectToRoute('login');
         }
@@ -55,7 +55,7 @@ class TaskController extends AbstractController
 
         $form->handleRequest($request);
 
-        if (($form->isSubmitted() && $form->isValid())){
+        if (($form->isSubmitted() && $form->isValid())) {
 
             $em->flush();
 
@@ -85,7 +85,7 @@ class TaskController extends AbstractController
     #[Route('/tasks/{id}/delete', name: 'task_delete')]
     public function deleteTaskAction(Task $task, EntityManagerInterface $em)
     {
-        if ($this->getUser() == null){
+        if ($this->getUser() == null) {
 
             return $this->redirectToRoute('login');
         }
@@ -95,18 +95,15 @@ class TaskController extends AbstractController
         $username = $task->getUser()->getUsername();
         $roles = $this->getUser()->getRoles();
 
-        if (($author == $connectedUser) || (in_array('ROLE_ADMIN', $roles) && $username == 'anonyme')){
+        if (($author == $connectedUser) || (in_array('ROLE_ADMIN', $roles) && $username == 'anonyme')) {
 
-        $em->remove($task);
-        $em->flush();
+            $em->remove($task);
+            $em->flush();
 
-        $this->addFlash('success', 'La tâche a bien été supprimée.');
-
-        }else {
+            $this->addFlash('success', 'La tâche a bien été supprimée.');
+        } else {
             $this->addFlash('error', "Vous n'avez pas les droits pour supprimer cette tâche");
         }
         return $this->redirectToRoute('task_list');
-
-
     }
 }
